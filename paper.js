@@ -16,7 +16,7 @@ class Paper{
         var angle = this.body.angle;
         var pos= this.body.position;
         push();
-        image(this.img,pos.x,pos.y,this.radius,this.radius)
+        image(this.img,pos.x,pos.y,2*this.radius,2*this.radius)
         translate(pos.x, pos.y);
         rotate(angle);
 
