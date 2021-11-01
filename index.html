@@ -1,17 +1,181 @@
+
 <!DOCTYPE html><html lang=""><head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Crumpled Paper</title>
       <style> body {padding: 0; margin: 0;} </style>
-      <script src="matter.js"></script>
-      <script src="p5.js"></script>
-      <script src="p5.play.js"></script>
+      <script src="https://assets.editor.p5js.org/5f489f3570161300209d8535/88f6a9d3-9874-45a2-942b-02f466c11d67.js"></script>
+      <script src="https://assets.editor.p5js.org/5f489f3570161300209d8535/6c4ba31c-9394-448b-be7e-bcf44c1127a1.js"></script>
+      <script src="https://assets.editor.p5js.org/5f489f3570161300209d8535/2a5a9c7a-ffe6-4810-a83a-0abbd550054f.js"></script>
       
-      <script src="sketch.js"></script>
-      <script src="dustbin.js"></script>
-      <script src="ground.js"></script>
-       <script src="paper.js"></script>
-    </head>
+      <script>
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Body = Matter.Body;
+const Render = Matter.Render;
+var dustbinObj,groundObject	
+var paper
+var world;
+
+
+function setup() {
+	createCanvas(1600, 700);
+	rectMode(CENTER);
+
+
+	engine = Engine.create();
+	world = engine.world;
+	
+	groundObject=new ground(width/2,690,width,20);
+	dustbinObj=new dustbin(1200,690);
+paper=new Paper(200,350,20,20)
+  
+	Engine.run(engine);
+  
+}
+function keyPressed(){
+  if(keyWentUp(UP_ARROW)){
+    Matter.Body.applyForce(paper.body,paper.body.position,{x:27.50,y:-35})
+  }
+}
+
+function draw() {
+  rectMode(CENTER);
+  	Engine.update(engine);
+  background(230);
+ keyPressed()
+
+  groundObject.display();
+  dustbinObj.display();
+paper.display()
+    dustbinObj.display();
+}
+
+</script>
+      <script>class dustbin
+{
+	constructor(x,y)
+	{
+		this.x=x;
+		this.y=y;
+		this.dustbinWidth=200;
+		this.dustbinHeight=213;
+		this.wallThickness=20;
+		
+		this.image=loadImage("https://assets.editor.p5js.org/5f489f3570161300209d8535/7b1137f7-0135-46b1-a0b2-e902fdeb3d20.png")
+		this.bottomBody=Bodies.rectangle(this.x, this.y, this.dustbinWidth, this.wallThickness, {isStatic:true})
+		this.leftWallBody=Bodies.rectangle(this.x-this.dustbinWidth/2, this.y-this.dustbinHeight/2, this.wallThickness, this.dustbinHeight, {isStatic:true})
+		
+		
+
+		this.rightWallBody=Bodies.rectangle(this.x+this.dustbinWidth/2, this.y+this.dustbinHeight/2, this.wallThickness, this.dustbinHeight, {isStatic:false})
+		
+		World.add(world, this.bottomBody)
+		World.add(world, this.leftWallBody)
+		World.add(world, this.rightWallBody);
+
+	}
+	display()
+	{
+			var posBottom=this.bottomBody.position;
+			var posLeft=this.leftWallBody.position;
+			var posRight=this.rightWallBody.position;
+
+			
+
+			push()
+			translate(posLeft.x, posLeft.y);
+			rectMode(CENTER)
+			//strokeWeight(4);
+			angleMode(RADIANS)
+			fill(255)
+			rotate(this.angle)
+			//rect(0,0,this.wallThickness, this.dustbinHeight);
+			pop()
+
+			push()
+			translate(posRight.x, posRight.y);
+			rectMode(CENTER)
+			strokeWeight(4);
+			angleMode(RADIANS)
+			fill(255)
+			rotate(-1*this.angle)
+			rect(0,0,this.wallThickness, this.dustbinHeight);
+			pop()
+
+			push()
+			translate(posBottom.x, posBottom.y+10);
+			rectMode(CENTER)
+			//strokeWeight(4);
+			angleMode(RADIANS)
+			fill(255)
+			imageMode(CENTER);
+			image(this.image, 0,-this.dustbinHeight/2,this.dustbinWidth, this.dustbinHeight)
+			//rect(0,0,this.dustbinWidth, this.wallThickness);
+			pop()
+			
+	}
+
+}</script>
+      <script>class ground
+{
+	constructor(x,y,w,h)
+	{
+		var options={
+			isStatic:true			
+			}
+		this.x=x;
+		this.y=y;
+		this.w=w
+		this.h=h
+		this.body=Bodies.rectangle(x, y, w, h , options);
+ 		World.add(world, this.body);
+
+	}
+	display()
+	{
+			
+			var groundPos=this.body.position;		
+
+			push()
+			translate(groundPos.x, groundPos.y);
+			rectMode(CENTER)
+			//strokeWeight(4);
+			fill(128,128,128)
+			rect(0,0,this.w, this.h);
+			pop()
+			
+	}
+
+}</script>
+       <script>class Paper{
+    constructor(x, y, width, height) {
+        var options = {
+               		isStatic:false,
+          resistution:0.1,
+          density:1.3,
+          friction:9
+        }
+        this.body = Bodies.rectangle(x, y, width, height, options);
+        this.width = width;
+      this.img= loadImage("https://assets.editor.p5js.org/5f489f3570161300209d8535/49991490-2c09-4134-84e0-2d0fcc82d98d.png")
+        this.height = height;
+        World.add(world, this.body);
+      }
+      display(){
+        var angle = this.body.angle;
+        var pos= this.body.position;
+        push();
+  imageMode(CENTER);
+        image(this.img,pos.x,pos.y,70,70)
+        translate(pos.x, pos.y);
+        rotate(angle);
+
+        pop();
+      }
+}</script>
+    <base href="//preview.p5js.org/shriansh.goel/present/mD6PRy95T/"></head>
     <body>
     
   
