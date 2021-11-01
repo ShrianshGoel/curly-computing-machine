@@ -42,11 +42,11 @@ class dustbin
 			push()
 			translate(posRight.x, posRight.y);
 			rectMode(CENTER)
-			//strokeWeight(4);
+			strokeWeight(4);
 			angleMode(RADIANS)
 			fill(255)
 			rotate(-1*this.angle)
-			//rect(0,0,this.wallThickness, this.dustbinHeight);
+			rect(0,0,this.wallThickness, this.dustbinHeight);
 			pop()
 
 			push()
